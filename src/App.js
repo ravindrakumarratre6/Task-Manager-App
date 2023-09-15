@@ -1,24 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Note the use of "as Router"
+import { useAuthState } from 'react-firebase-hooks/auth';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import Navbar from './components/Navbar';
+import TaskForm from './components/TaskForm';
+import TaskList from './components/TaskList';
+import { getAuth } from 'firebase/auth';
+import { app } from './firebase';
 
 function App() {
+  const auth = getAuth(app);
+  const [user] = useAuthState(auth);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router> {/* Use "Router" instead of "BrowserRouter" */}
+      <Navbar user={user} />
+
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+
+        {user ? (
+          <>
+            <Route path="/taskform" element={<TaskForm />} />
+            <Route path="/tasklist" element={<TaskList />} />
+          </>
+        ) : (
+          <Route path="/" element={<p>Please sign in to access tasks.</p>} />
+        )}
+      </Routes>
+    </Router> 
   );
 }
 
