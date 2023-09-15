@@ -28,7 +28,7 @@ function App() {
             <Route path="/tasklist" element={<TaskList />} />
           </>
         ) : (
-          <Route path="/" element={<p>Please sign in to access tasks.</p>} />
+          <Route path="/" element={<p style={{textAlign:"center",color:"blue"}}>Please sign in to access tasks.</p>} />
         )}
       </Routes>
     </Router> 
